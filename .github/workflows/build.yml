@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y python3 python3-pip
+        sudo apt install -y python3 python3-pip openjdk-8-jdk wget unzip
         pip3 install cython
         sudo apt-get install -f
         sudo dpkg --configure -a
@@ -29,7 +29,6 @@ jobs:
 
     - name: Set up Java 8
       run: |
-        sudo apt install -y openjdk-8-jdk
         sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
         sudo update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
 
@@ -46,5 +45,10 @@ jobs:
         cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-31" "build-tools;30.0.3"
 
     - name: Build with Buildozer
+      env:
+        ANDROIDSDK: $HOME/.buildozer/android/platform/android-sdk
+        ANDROIDNDK: $HOME/.buildozer/android/platform/android-ndk-r25b
+        ANDROIDAPI: 31
+        ANDROIDMINAPI: 21
       run: |
         buildozer -v android debug
