@@ -32,6 +32,17 @@ jobs:
         sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
         sudo update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
 
+    - name: Install JAXB
+      run: |
+        wget https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-impl/2.3.0/jaxb-impl-2.3.0.jar
+        wget https://repo1.maven.org/maven2/com/sun/xml/bind/jaxb-core/2.3.0/jaxb-core-2.3.0.jar
+        wget https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar
+        sudo mkdir -p /usr/share/java/jaxb
+        sudo mv jaxb-impl-2.3.0.jar /usr/share/java/jaxb/
+        sudo mv jaxb-core-2.3.0.jar /usr/share/java/jaxb/
+        sudo mv jaxb-api-2.3.0.jar /usr/share/java/jaxb/
+        echo 'export CLASSPATH=$CLASSPATH:/usr/share/java/jaxb/jaxb-api-2.3.0.jar:/usr/share/java/jaxb/jaxb-core-2.3.0.jar:/usr/share/java/jaxb/jaxb-impl-2.3.0.jar' >> $GITHUB_ENV
+
     - name: Set up Android SDK
       run: |
         mkdir -p $HOME/.buildozer/android/platform/android-sdk
@@ -62,6 +73,7 @@ jobs:
         ANDROIDMINAPI: 21
       run: |
         buildozer -v android debug 2>&1 | tee buildozer_full.log
+
     - name: Upload Buildozer Log
       if: failure()
       uses: actions/upload-artifact@v2
