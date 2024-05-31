@@ -27,6 +27,12 @@ jobs:
         pip3 install buildozer
         pip3 install git+https://github.com/kivy/python-for-android.git
 
+    - name: Set up Java 8
+      run: |
+        sudo apt install -y openjdk-8-jdk
+        sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+        sudo update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
+
     - name: Set up Android SDK
       run: |
         mkdir -p $HOME/.buildozer/android/platform/android-sdk
@@ -37,9 +43,6 @@ jobs:
         mv cmdline-tools/cmdline-tools/* cmdline-tools/latest/
         yes | cmdline-tools/latest/bin/sdkmanager --licenses
         cmdline-tools/latest/bin/sdkmanager --update
-        sudo apt install -y libjaxb-api-java libjaxb-java libjaxp1.3-java
-        export JAVA_HOME="/usr/lib/jvm/temurin-8-jdk-amd64"
-        export PATH="$JAVA_HOME/bin:$PATH"
         cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-31" "build-tools;30.0.3"
 
     - name: Build with Buildozer
