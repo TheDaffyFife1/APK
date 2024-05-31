@@ -37,6 +37,9 @@ jobs:
         mv cmdline-tools/cmdline-tools/* cmdline-tools/latest/
         yes | cmdline-tools/latest/bin/sdkmanager --licenses
         cmdline-tools/latest/bin/sdkmanager --update
+        sudo apt install -y libjaxb-api-java libjaxb-java libjaxp1.3-java
+        export JAVA_HOME="/usr/lib/jvm/temurin-8-jdk-amd64"
+        export PATH="$JAVA_HOME/bin:$PATH"
         cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-31" "build-tools;30.0.3"
 
     - name: Build with Buildozer
