@@ -40,14 +40,24 @@ jobs:
         unzip android_cmd_tools.zip -d cmdline-tools
         mkdir -p cmdline-tools/latest
         mv cmdline-tools/cmdline-tools/* cmdline-tools/latest/
-        yes | cmdline-tools/latest/bin/sdkmanager --licenses
-        cmdline-tools/latest/bin/sdkmanager --update
-        cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-31" "build-tools;30.0.3"
+        yes | JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 cmdline-tools/latest/bin/sdkmanager --licenses
+        JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 cmdline-tools/latest/bin/sdkmanager --update
+        JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-31" "build-tools;30.0.3"
+
+    - name: Set up Android NDK
+      run: |
+        mkdir -p $HOME/.buildozer/android/platform
+        cd $HOME/.buildozer/android/platform
+        wget https://dl.google.com/android/repository/android-ndk-r25b-linux.zip
+        unzip android-ndk-r25b-linux.zip
+        mv android-ndk-r25b ndk
+      env:
+        JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
 
     - name: Build with Buildozer
       env:
         ANDROIDSDK: $HOME/.buildozer/android/platform/android-sdk
-        ANDROIDNDK: $HOME/.buildozer/android/platform/android-ndk-r25b
+        ANDROIDNDK: $HOME/.buildozer/android/platform/ndk
         ANDROIDAPI: 31
         ANDROIDMINAPI: 21
       run: |
