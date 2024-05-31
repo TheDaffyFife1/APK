@@ -61,4 +61,10 @@ jobs:
         ANDROIDAPI: 31
         ANDROIDMINAPI: 21
       run: |
-        buildozer -v android debug
+        buildozer -v android debug 2>&1 | tee buildozer_full.log
+    - name: Upload Buildozer Log
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: buildozer-log
+        path: buildozer_full.log
